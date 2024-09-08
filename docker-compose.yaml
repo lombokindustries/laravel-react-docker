@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+
+    frontend:
+      build:
+        context: ./app-frontend 
+      ports:
+        - "80:80"
+
+    backend:
+      build:
+        context: ./app-backend/
+      environment:
+        MYSQL_DATABASE: "uki"
+        MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+        MYSQL_PASSWORD: ""
+        MYSQL_USER: "root"
+      working_dir: /var/www/html
+      volumes:
+        - ./app-backend:/var/www/html
+      ports:
+        - 8000:80
+
+    database:
+      image: mysql:8.2  
+      environment:
+        MYSQL_DATABASE: "uki"
+        MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+        MYSQL_PASSWORD: ""
+        MYSQL_USER: "root"
+      ports:
+        - 8306:3306
+      volumes:
+        - database:/var/lib/mysql
+
+volumes:
+  database:
